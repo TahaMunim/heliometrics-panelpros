@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Key Challenges</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 1280px;
+            height: 720px;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            background-color: #0F172A;
+        }
+        
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #0F172A;
+            overflow: hidden;
+        }
+
+        /* SVG Background mimicking gradient */
+        .bg-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 40px 60px;
+        }
+
+        .header-section {
+            margin-bottom: 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .main-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -1px;
+            margin: 0;
+        }
+
+        .sub-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            color: #94A3B8;
+            margin-bottom: 5px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 24px;
+            flex: 1;
+            margin-top: 10px;
+        }
+
+        .challenge-card {
+            background-color: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .card-number {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 4rem;
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.03);
+            line-height: 1;
+        }
+
+        .icon-container {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .icon-amber {
+            background-color: rgba(245, 158, 11, 0.15);
+            color: #F59E0B;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .icon-blue {
+            background-color: rgba(59, 130, 246, 0.15);
+            color: #3B82F6;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .icon-red {
+            background-color: rgba(239, 68, 68, 0.15);
+            color: #EF4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .icon-cyan {
+            background-color: rgba(6, 182, 212, 0.15);
+            color: #06B6D4;
+            border: 1px solid rgba(6, 182, 212, 0.3);
+        }
+
+        .card-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #E2E8F0;
+            margin: 0 0 10px 0;
+        }
+
+        .stat-highlight {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #F8FAFC;
+            margin: 5px 0 10px 0;
+            line-height: 1;
+        }
+
+        .stat-unit {
+            font-size: 1rem;
+            font-weight: 400;
+            color: #94A3B8;
+            margin-left: 5px;
+        }
+
+        .card-description {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #CBD5E1;
+            margin: 0;
+        }
+
+        /* Accent Lines */
+        .accent-bar {
+            position: absolute;
+            left: 0;
+            top: 20px;
+            bottom: 20px;
+            width: 4px;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .bar-amber { background-color: #F59E0B; }
+        .bar-blue { background-color: #3B82F6; }
+        .bar-red { background-color: #EF4444; }
+        .bar-cyan { background-color: #06B6D4; }
+
+        .source-tag {
+            position: absolute;
+            bottom: 25px;
+            right: 60px;
+            font-size: 0.75rem;
+            color: rgba(148, 163, 184, 0.6);
+            z-index: 20;
+        }
+
+        /* Abstract shapes */
+        .shape-blob {
+            position: absolute;
+            filter: blur(80px);
+            opacity: 0.15;
+            z-index: 1;
+        }
+        
+        .blob-1 { top: -100px; right: -100px; width: 400px; height: 400px; background-color: #3B82F6; }
+        .blob-2 { bottom: -100px; left: -100px; width: 400px; height: 400px; background-color: #F59E0B; }
+
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background -->
+<svg class="bg-layer" preserveaspectratio="none" viewbox="0 0 1280 720">
+<defs>
+<lineargradient id="bgGrad" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#0F172A"></stop>
+<stop offset="100%" stop-color="#1E293B"></stop>
+</lineargradient>
+<pattern height="40" id="techGrid" patternunits="userSpaceOnUse" width="40">
+<path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"></path>
+</pattern>
+</defs>
+<rect fill="url(#bgGrad)" height="100%" width="100%"></rect>
+<rect fill="url(#techGrid)" height="100%" width="100%"></rect>
+</svg>
+<div class="shape-blob blob-1"></div>
+<div class="shape-blob blob-2"></div>
+<div class="content-wrapper">
+<div class="header-section">
+<div>
+<h1 class="main-title">Key Challenges</h1>
+<p style="margin: 5px 0 0 0; color: #F59E0B; font-weight: 500;">Problem Statement</p>
+</div>
+<div class="sub-title">Major factors undermining PV system performance in arid environments</div>
+</div>
+<div class="grid-container">
+<!-- Card 1 -->
+<div class="challenge-card">
+<div class="accent-bar bar-amber"></div>
+<div class="card-number">01</div>
+<div class="icon-container icon-amber">
+<i class="fas fa-wind"></i>
+</div>
+<h3 class="card-title">Irregular Dust Events</h3>
+<div class="stat-highlight">102-154 <span class="stat-unit">days/year</span></div>
+<p class="card-description">
+                        High variability in dust storm patterns across UAE regions makes fixed-schedule maintenance ineffective. Eastern areas experience up to 154 dust days annually.
+                    </p>
+</div>
+<!-- Card 2 -->
+<div class="challenge-card">
+<div class="accent-bar bar-blue"></div>
+<div class="card-number">02</div>
+<div class="icon-container icon-blue">
+<i class="fas fa-tint"></i>
+</div>
+<h3 class="card-title">Excessive Water Usage</h3>
+<div class="stat-highlight">9-15 <span class="stat-unit">tons/MW</span></div>
+<p class="card-description">
+                        Traditional cleaning methods consume massive amounts of water per cycle. For a 2 MW installation, this creates significant sustainability concerns in water-scarce regions.
+                    </p>
+</div>
+<!-- Card 3 -->
+<div class="challenge-card">
+<div class="accent-bar bar-red"></div>
+<div class="card-number">03</div>
+<div class="icon-container icon-red">
+<i class="fas fa-coins"></i>
+</div>
+<h3 class="card-title">High Operational Costs</h3>
+<div class="stat-highlight">35.9% <span class="stat-unit">of total cost</span></div>
+<p class="card-description">
+                        Manual labor, equipment depreciation, and scheduled robot operations represent over one-third of total system costs over the operational lifetime, reducing ROI.
+                    </p>
+</div>
+<!-- Card 4 -->
+<div class="challenge-card">
+<div class="accent-bar bar-cyan"></div>
+<div class="card-number">04</div>
+<div class="icon-container icon-cyan">
+<i class="fas fa-bolt"></i>
+</div>
+<h3 class="card-title">Suboptimal Energy Yield</h3>
+<div class="stat-highlight">67% <span class="stat-unit">capture efficiency</span></div>
+<p class="card-description">
+                        Delayed responses to dust events and unnecessary cleaning during stable periods result in significant lost revenue and extended payback periods.
+                    </p>
+</div>
+</div>
+</div>
+<div class="source-tag">Source: HelioMetrics Research Paper, p.2</div>
+</div>
+</body>
+</html>

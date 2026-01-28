@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HelioMetrics Solution Overview</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 1280px;
+            height: 720px;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            background-color: #0F172A;
+            color: #F8FAFC;
+        }
+        
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #1e293b;
+        }
+
+        /* SVG Background mimicking gradient */
+        .bg-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .header-section {
+            padding: 40px 60px 20px 60px;
+            z-index: 10;
+        }
+
+        .main-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .main-title span {
+            color: #F59E0B; /* Amber-500 */
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: #94A3B8;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 0 60px 40px 60px;
+            z-index: 10;
+            gap: 30px;
+        }
+
+        /* Pillars Container */
+        .pillars-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 24px;
+            margin-top: 20px;
+        }
+
+        .pillar-card {
+            flex: 1;
+            background-color: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 16px;
+            padding: 24px;
+            position: relative;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pillar-icon-container {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .icon-realtime { background-color: rgba(59, 130, 246, 0.2); color: #60A5FA; }
+        .icon-modular { background-color: rgba(245, 158, 11, 0.2); color: #FBBF24; }
+        .icon-automation { background-color: rgba(16, 185, 129, 0.2); color: #34D399; }
+
+        .pillar-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #F1F5F9;
+        }
+
+        .pillar-desc {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #CBD5E1;
+            margin-bottom: 16px;
+            flex-grow: 1;
+        }
+
+        .comparison-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            background-color: rgba(255, 255, 255, 0.05);
+            color: #94A3B8;
+        }
+
+        /* Transition Visual */
+        .transition-visual {
+            background-color: rgba(15, 23, 42, 0.6);
+            border-radius: 16px;
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 10px;
+        }
+
+        .state-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .state-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .state-value {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .arrow-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0 40px;
+            position: relative;
+        }
+
+        .arrow-line {
+            width: 100%;
+            height: 4px;
+            background-color: #334155;
+            position: relative;
+            border-radius: 2px;
+        }
+        
+        .arrow-progress {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 70%;
+            background-color: #F59E0B;
+            border-radius: 2px;
+        }
+
+        .arrow-head {
+            position: absolute;
+            right: -2px;
+            top: -6px;
+            color: #334155;
+            font-size: 16px;
+        }
+        
+        .arrow-head-active {
+            position: absolute;
+            left: 70%;
+            top: -6px;
+            transform: translateX(-5px);
+            color: #F59E0B;
+            font-size: 16px;
+        }
+
+        .transition-tag {
+            background-color: #F59E0B;
+            color: #0F172A;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-top: 10px;
+        }
+
+        /* Decor */
+        .corner-accent {
+            position: absolute;
+            top: 40px;
+            right: 60px;
+            width: 100px;
+            height: 100px;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background SVG -->
+<svg class="bg-svg" preserveaspectratio="none" viewbox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<lineargradient id="bgGrad" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#1e293b;stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:#0f172a;stop-opacity:1"></stop>
+</lineargradient>
+<pattern height="40" id="gridPattern" patternunits="userSpaceOnUse" width="40">
+<path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"></path>
+</pattern>
+</defs>
+<rect fill="url(#bgGrad)" height="100%" width="100%"></rect>
+<!-- Bottom Right Blue Glow -->
+<circle cx="1200" cy="700" fill="#3B82F6" filter="blur(80px)" opacity="0.1" r="400"></circle>
+<!-- Top Left Amber Glow -->
+<circle cx="100" cy="100" fill="#F59E0B" filter="blur(60px)" opacity="0.08" r="300"></circle>
+<!-- Grid Overlay -->
+<rect fill="url(#gridPattern)" height="100%" width="100%"></rect>
+</svg>
+<div class="header-section">
+<div style="width: 60px; height: 6px; background-color: #F59E0B; margin-bottom: 20px; border-radius: 3px;"></div>
+<h1 class="main-title">Helio<span>Metrics</span> Solution</h1>
+<p class="subtitle">An intelligent framework transforming solar maintenance</p>
+</div>
+<!-- Solar Icon Top Right -->
+<div class="corner-accent">
+<svg fill="none" stroke="#F59E0B" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" viewbox="0 0 24 24">
+<circle cx="12" cy="12" r="5"></circle>
+<line x1="12" x2="12" y1="1" y2="3"></line>
+<line x1="12" x2="12" y1="21" y2="23"></line>
+<line x1="4.22" x2="5.64" y1="4.22" y2="5.64"></line>
+<line x1="18.36" x2="19.78" y1="18.36" y2="19.78"></line>
+<line x1="1" x2="3" y1="12" y2="12"></line>
+<line x1="21" x2="23" y1="12" y2="12"></line>
+<line x1="4.22" x2="5.64" y1="19.78" y2="18.36"></line>
+<line x1="18.36" x2="19.78" y1="5.64" y2="4.22"></line>
+</svg>
+</div>
+<div class="content-area">
+<!-- Three Pillars -->
+<div class="pillars-container">
+<!-- Pillar 1 -->
+<div class="pillar-card">
+<div class="pillar-icon-container icon-realtime">
+<i class="fas fa-brain"></i>
+</div>
+<h3 class="pillar-title">Real-time Intelligence</h3>
+<p class="pillar-desc">Continuously monitors actual power output against expected baselines adjusted for irradiance, detecting degradation instantly as it occurs.</p>
+<div class="comparison-badge">
+<i class="fas fa-times-circle text-red-400 mr-2"></i>Vs. Predetermined Schedules
+                </div>
+</div>
+<!-- Pillar 2 -->
+<div class="pillar-card">
+<div class="pillar-icon-container icon-modular">
+<i class="fas fa-th-large"></i>
+</div>
+<h3 class="pillar-title">Modular Scalability</h3>
+<p class="pillar-desc">Divides arrays into intelligent sections with independent monitoring and cleaning, allowing targeted intervention only where needed.</p>
+<div class="comparison-badge">
+<i class="fas fa-times-circle text-red-400 mr-2"></i>Vs. Mass Array Cleaning
+                </div>
+</div>
+<!-- Pillar 3 -->
+<div class="pillar-card">
+<div class="pillar-icon-container icon-automation">
+<i class="fas fa-robot"></i>
+</div>
+<h3 class="pillar-title">Condition-Based Automation</h3>
+<p class="pillar-desc">Replaces time-based triggers with performance-based logic, activating cleaning only when efficiency drops below specific thresholds.</p>
+<div class="comparison-badge">
+<i class="fas fa-times-circle text-red-400 mr-2"></i>Vs. Time-Based Maintenance
+                </div>
+</div>
+</div>
+<!-- Transition Visual -->
+<div class="transition-visual">
+<div class="state-box" style="opacity: 0.6;">
+<span class="state-label text-gray-400">Traditional Approach</span>
+<span class="state-value text-gray-300">Reactive &amp; Fixed</span>
+<p style="font-size: 0.8rem; margin-top: 5px; color: #64748B;">Scheduled Maintenance</p>
+</div>
+<div class="arrow-container">
+<div class="arrow-line">
+<div class="arrow-progress"></div>
+</div>
+<i class="fas fa-caret-right arrow-head"></i>
+<i class="fas fa-caret-right arrow-head-active"></i>
+<div class="transition-tag">HelioMetrics Paradigm Shift</div>
+</div>
+<div class="state-box">
+<span class="state-label text-blue-400">New Standard</span>
+<span class="state-value text-white">Proactive &amp; Adaptive</span>
+<p style="font-size: 0.8rem; margin-top: 5px; color: #94A3B8;">Performance-Driven Logic</p>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

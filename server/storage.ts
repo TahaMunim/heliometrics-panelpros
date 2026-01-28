@@ -1,37 +1,23 @@
-import { type User, type InsertUser } from "@shared/schema";
-import { randomUUID } from "crypto";
-
-// modify the interface with any CRUD methods
-// you might need
+import { slides, type Slide, type InsertSlide } from "@shared/schema";
 
 export interface IStorage {
-  getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+  getSlides(): Promise<Slide[]>;
 }
 
 export class MemStorage implements IStorage {
-  private users: Map<string, User>;
-
-  constructor() {
-    this.users = new Map();
-  }
-
-  async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
-  }
-
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
-  }
-
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const id = randomUUID();
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
+  async getSlides(): Promise<Slide[]> {
+    // Return the 12 slides in order
+    // Files are named 1.html, 2.html, ..., 12.html
+    const slideList: Slide[] = [];
+    for (let i = 1; i <= 12; i++) {
+      slideList.push({
+        id: i,
+        title: `Slide ${i}`,
+        url: `/slides/${i}.html`,
+        order: i
+      });
+    }
+    return slideList;
   }
 }
 

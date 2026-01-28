@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Case Study Results</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 1280px;
+            height: 720px;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            background-color: #0F172A;
+            color: #F8FAFC;
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #1e293b;
+        }
+
+        /* Background SVG */
+        .bg-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        /* Content Wrapper */
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+            height: 100%;
+            padding: 40px 60px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            margin-bottom: 25px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .main-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .sub-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            color: #94A3B8;
+            margin: 0;
+            letter-spacing: 1px;
+        }
+
+        /* Grid Layout */
+        .results-grid {
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 24px;
+            flex: 1;
+            min-height: 0; /* Prevents overflow */
+        }
+
+        /* Card Styles */
+        .result-card {
+            background-color: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 25px;
+            position: relative;
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .icon-box {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .icon-amber { background: rgba(245, 158, 11, 0.15); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.3); }
+        .icon-blue { background: rgba(59, 130, 246, 0.15); color: #3B82F6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .icon-green { background: rgba(16, 185, 129, 0.15); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .icon-cyan { background: rgba(6, 182, 212, 0.15); color: #06B6D4; border: 1px solid rgba(6, 182, 212, 0.3); }
+
+        .card-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #E2E8F0;
+        }
+
+        .big-number {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.2rem;
+            font-weight: 800;
+            color: #F8FAFC;
+            line-height: 1;
+            margin: 5px 0 10px 0;
+        }
+
+        .unit {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #94A3B8;
+        }
+
+        .description {
+            font-size: 0.95rem;
+            color: #CBD5E1;
+            line-height: 1.5;
+        }
+
+        /* Specific Card Layouts */
+        .panel-comparison {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .panel-stat {
+            text-align: center;
+        }
+        
+        .panel-val { font-size: 1.4rem; font-weight: 700; color: #fff; }
+        .panel-label { font-size: 0.8rem; color: #94A3B8; margin-top: 4px; }
+        .diff-badge { 
+            background: rgba(16, 185, 129, 0.15); 
+            color: #10B981; 
+            padding: 6px 14px; 
+            border-radius: 20px; 
+            font-weight: 700; 
+            font-size: 0.9rem;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .impact-container {
+            display: flex;
+            gap: 15px;
+            margin-top: auto;
+        }
+        
+        .impact-item {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .impact-icon { color: #10B981; font-size: 1.2rem; }
+        .impact-text p { margin: 0; line-height: 1.2; }
+        .impact-val { font-weight: 700; color: #fff; font-size: 1rem; }
+        .impact-lbl { font-size: 0.75rem; color: #94A3B8; }
+
+        /* Chart Areas */
+        .water-chart-container {
+            height: 100px;
+            width: 100%;
+            position: relative;
+        }
+        
+        .water-bar {
+            height: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            width: 100%;
+            margin-top: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .water-fill {
+            height: 100%;
+            background: #06B6D4;
+            width: 60%; /* Represents 432/720 */
+            border-radius: 6px;
+        }
+        
+        .water-marker {
+            position: absolute;
+            right: 40%;
+            top: -25px;
+            font-size: 0.8rem;
+            color: #06B6D4;
+            font-weight: 600;
+        }
+
+        /* Source Tag */
+        .source-tag {
+            position: absolute;
+            bottom: 30px;
+            right: 60px;
+            font-size: 0.75rem;
+            color: #64748B;
+        }
+
+        /* Accents */
+        .card-accent {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            border-radius: 4px 0 0 4px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background -->
+<svg class="bg-svg" preserveaspectratio="none" viewbox="0 0 1280 720">
+<defs>
+<lineargradient id="bgGrad" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#1e293b"></stop>
+<stop offset="100%" stop-color="#0f172a"></stop>
+</lineargradient>
+<pattern height="40" id="grid" patternunits="userSpaceOnUse" width="40">
+<path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"></path>
+</pattern>
+</defs>
+<rect fill="url(#bgGrad)" height="100%" width="100%"></rect>
+<rect fill="url(#grid)" height="100%" width="100%"></rect>
+<!-- Glows -->
+<circle cx="1200" cy="100" fill="#F59E0B" filter="blur(80px)" opacity="0.1" r="300"></circle>
+<circle cx="100" cy="700" fill="#3B82F6" filter="blur(80px)" opacity="0.1" r="300"></circle>
+</svg>
+<div class="content-wrapper">
+<div class="header">
+<div>
+<h1 class="main-title">Case Study Results</h1>
+<p class="sub-title">2 MW Residential Complex Implementation</p>
+</div>
+<div style="text-align: right;">
+<span style="display: block; font-size: 0.9rem; color: #64748B; margin-bottom: 5px;">LOCATION</span>
+<span style="display: block; font-weight: 600; color: #E2E8F0;">UAE Residential Complex</span>
+</div>
+</div>
+<div class="results-grid">
+<!-- Card 1: Panel Efficiency (Top Left) -->
+<div class="result-card">
+<div class="card-accent" style="background-color: #F59E0B;"></div>
+<div>
+<div class="card-header">
+<div class="icon-box icon-amber"><i class="fas fa-solar-panel"></i></div>
+<span class="card-title">Hardware Optimization</span>
+</div>
+<div class="big-number">7% <span class="unit">Reduction</span></div>
+<p class="description">Achieved target output with 1,673 fewer panels required.</p>
+</div>
+<div class="panel-comparison">
+<div class="panel-stat">
+<div class="panel-val">23,923</div>
+<div class="panel-label">Conventional</div>
+</div>
+<div class="diff-badge">
+<i class="fas fa-arrow-down mr-1"></i> 1,673
+                        </div>
+<div class="panel-stat">
+<div class="panel-val" style="color: #F59E0B;">22,250</div>
+<div class="panel-label">HelioMetrics</div>
+</div>
+</div>
+</div>
+<!-- Card 2: Annual Energy (Top Right) -->
+<div class="result-card">
+<div class="card-accent" style="background-color: #3B82F6;"></div>
+<div class="card-header">
+<div class="icon-box icon-blue"><i class="fas fa-bolt"></i></div>
+<span class="card-title">Annual Energy Output</span>
+</div>
+<div>
+<div class="big-number">17.52 <span class="unit">GWh</span></div>
+<p class="description">Consistent energy generation meeting the 2 MW requirement with improved empirical capture efficiency.</p>
+</div>
+<div style="height: 40px; display: flex; align-items: flex-end;">
+<div style="font-size: 0.9rem; color: #60A5FA;">
+<i class="fas fa-check-circle mr-2"></i>Exceeds Efficiency Targets
+                    </div>
+</div>
+</div>
+<!-- Card 3: Environmental Impact (Bottom Left) -->
+<div class="result-card">
+<div class="card-accent" style="background-color: #10B981;"></div>
+<div class="card-header">
+<div class="icon-box icon-green"><i class="fas fa-leaf"></i></div>
+<span class="card-title">Carbon Footprint</span>
+</div>
+<div class="big-number">3,617 <span class="unit">Tons CO₂</span></div>
+<p class="description" style="margin-bottom: 20px;">Annual carbon dioxide emissions avoided.</p>
+<div class="impact-container">
+<div class="impact-item">
+<i class="fas fa-car impact-icon"></i>
+<div class="impact-text">
+<p class="impact-val">786</p>
+<p class="impact-lbl">Cars Removed</p>
+</div>
+</div>
+<div class="impact-item">
+<i class="fas fa-tree impact-icon"></i>
+<div class="impact-text">
+<p class="impact-val">172k</p>
+<p class="impact-lbl">Trees Planted</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 4: Water Conservation (Bottom Right) -->
+<div class="result-card">
+<div class="card-accent" style="background-color: #06B6D4;"></div>
+<div class="card-header">
+<div class="icon-box icon-cyan"><i class="fas fa-hand-holding-water"></i></div>
+<span class="card-title">Water Conservation</span>
+</div>
+<div class="big-number">40% <span class="unit">Savings</span></div>
+<p class="description">Intelligent cleaning reduces water usage significantly.</p>
+<div style="margin-top: 15px;">
+<div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #CBD5E1; margin-bottom: 5px;">
+<span>720 Tons (Standard)</span>
+<span style="color: #06B6D4; font-weight: 700;">432 Tons (Helio)</span>
+</div>
+<div class="water-bar">
+<div class="water-fill"></div>
+</div>
+<div style="margin-top: 10px; font-size: 0.85rem; color: #94A3B8;">
+<i class="fas fa-tint text-cyan-400 mr-2"></i>288 tons saved annually
+                    </div>
+</div>
+</div>
+</div>
+<div class="source-tag">Source: HelioMetrics Research Paper, Section VI &amp; VII (p.4-5)</div>
+</div>
+</div>
+</body>
+</html>

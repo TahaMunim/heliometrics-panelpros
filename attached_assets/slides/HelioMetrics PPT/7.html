@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Control Logic Workflow</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 1280px;
+            height: 720px;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            background-color: #0F172A;
+            color: #F8FAFC;
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #0F172A;
+        }
+
+        /* SVG Background Layers */
+        .bg-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .header-section {
+            padding: 40px 60px 20px 60px;
+            z-index: 10;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .main-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0;
+        }
+
+        .sub-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            color: #94A3B8;
+            margin-top: 5px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 60px;
+            z-index: 10;
+        }
+
+        /* Workflow Container */
+        .workflow-container {
+            display: flex;
+            align-items: stretch;
+            justify-content: space-between;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .phase-card {
+            flex: 1;
+            background-color: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 24px 20px;
+            position: relative;
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .phase-card:hover {
+            transform: translateY(-5px);
+            background-color: rgba(30, 41, 59, 0.8);
+        }
+
+        /* Card Header Color Strips */
+        .card-strip {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            border-radius: 12px 12px 0 0;
+        }
+
+        /* Colors for phases */
+        .phase-1 .card-strip { background-color: #60A5FA; } /* Blue */
+        .phase-2 .card-strip { background-color: #818CF8; } /* Indigo */
+        .phase-3 .card-strip { background-color: #F59E0B; } /* Amber */
+        .phase-4 .card-strip { background-color: #34D399; } /* Emerald */
+
+        .phase-number {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+        
+        .phase-1 .phase-number { color: #60A5FA; }
+        .phase-2 .phase-number { color: #818CF8; }
+        .phase-3 .phase-number { color: #F59E0B; }
+        .phase-4 .phase-number { color: #34D399; }
+
+        .icon-wrapper {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .phase-1 .icon-wrapper { background-color: rgba(96, 165, 250, 0.2); color: #60A5FA; }
+        .phase-2 .icon-wrapper { background-color: rgba(129, 140, 248, 0.2); color: #818CF8; }
+        .phase-3 .icon-wrapper { background-color: rgba(245, 158, 11, 0.2); color: #F59E0B; }
+        .phase-4 .icon-wrapper { background-color: rgba(52, 211, 153, 0.2); color: #34D399; }
+
+        .card-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #FFFFFF;
+            margin-bottom: 15px;
+            min-height: 2.4rem; /* Ensure alignment */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .details-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            text-align: left;
+        }
+
+        .details-list li {
+            font-size: 0.85rem;
+            color: #CBD5E1;
+            margin-bottom: 10px;
+            padding-left: 15px;
+            position: relative;
+            line-height: 1.4;
+        }
+
+        .details-list li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #64748B;
+            font-weight: bold;
+        }
+
+        .phase-1 .details-list li::before { color: #60A5FA; }
+        .phase-2 .details-list li::before { color: #818CF8; }
+        .phase-3 .details-list li::before { color: #F59E0B; }
+        .phase-4 .details-list li::before { color: #34D399; }
+
+        /* Connector Arrows */
+        .connector {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #475569;
+            font-size: 1.5rem;
+            margin-top: -60px; /* Align with icons roughly */
+        }
+
+        .source-tag {
+            position: absolute;
+            bottom: 30px;
+            right: 60px;
+            font-size: 0.75rem;
+            color: #64748B;
+            z-index: 20;
+        }
+
+        /* Abstract Shapes */
+        .glow-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: 1;
+            opacity: 0.1;
+        }
+
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- SVG Background -->
+<svg class="bg-layer" preserveaspectratio="none" viewbox="0 0 1280 720">
+<defs>
+<lineargradient id="bgGrad" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#1e293b;stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:#0f172a;stop-opacity:1"></stop>
+</lineargradient>
+<pattern height="100" id="circuitPattern" patternunits="userSpaceOnUse" width="100" x="0" y="0">
+<path d="M10 10 L90 10 L90 90 L10 90 Z" fill="none" stroke="rgba(255,255,255,0.02)" stroke-width="1"></path>
+<circle cx="10" cy="10" fill="rgba(255,255,255,0.03)" r="2"></circle>
+<circle cx="90" cy="90" fill="rgba(255,255,255,0.03)" r="2"></circle>
+</pattern>
+</defs>
+<rect fill="url(#bgGrad)" height="100%" width="100%"></rect>
+<rect fill="url(#circuitPattern)" height="100%" width="100%"></rect>
+</svg>
+<!-- Decorative Glows -->
+<div class="glow-orb" style="top: -100px; left: -100px; width: 500px; height: 500px; background-color: #3B82F6;"></div>
+<div class="glow-orb" style="bottom: -100px; right: -100px; width: 600px; height: 600px; background-color: #F59E0B;"></div>
+<div class="header-section">
+<h1 class="main-title">Software &amp; Control Logic</h1>
+<p class="sub-title">Intelligent 4-Phase Decision Workflow</p>
+</div>
+<div class="content-area">
+<div class="workflow-container">
+<!-- Phase 1 -->
+<div class="phase-card phase-1">
+<div class="card-strip"></div>
+<div class="phase-number">Phase 01</div>
+<div class="icon-wrapper">
+<i class="fas fa-wave-square"></i>
+</div>
+<h3 class="card-title">Continuous<br/>Monitoring</h3>
+<ul class="details-list">
+<li>High-frequency sensor polling (100-1000ms intervals)</li>
+<li>Instantaneous Power Calculation (P = V × I)</li>
+<li>Data aggregation via Arduino MCU</li>
+</ul>
+</div>
+<!-- Connector -->
+<div class="connector">
+<i class="fas fa-chevron-right"></i>
+</div>
+<!-- Phase 2 -->
+<div class="phase-card phase-2">
+<div class="card-strip"></div>
+<div class="phase-number">Phase 02</div>
+<div class="icon-wrapper">
+<i class="fas fa-chart-line"></i>
+</div>
+<h3 class="card-title">Performance<br/>Analysis</h3>
+<ul class="details-list">
+<li>Real-time baseline comparison</li>
+<li>Adjustment for solar irradiance &amp; temp</li>
+<li>Normalization of expected output values</li>
+</ul>
+</div>
+<!-- Connector -->
+<div class="connector">
+<i class="fas fa-chevron-right"></i>
+</div>
+<!-- Phase 3 -->
+<div class="phase-card phase-3">
+<div class="card-strip"></div>
+<div class="phase-number">Phase 03</div>
+<div class="icon-wrapper">
+<i class="fas fa-filter"></i>
+</div>
+<h3 class="card-title">Threshold<br/>Evaluation</h3>
+<ul class="details-list">
+<li>Logic trigger condition assessment</li>
+<li>Triggers when efficiency &lt; 85-90%</li>
+<li>Prevents false positives from transient clouds</li>
+</ul>
+</div>
+<!-- Connector -->
+<div class="connector">
+<i class="fas fa-chevron-right"></i>
+</div>
+<!-- Phase 4 -->
+<div class="phase-card phase-4">
+<div class="card-strip"></div>
+<div class="phase-number">Phase 04</div>
+<div class="icon-wrapper">
+<i class="fas fa-shower"></i>
+</div>
+<h3 class="card-title">Targeted<br/>Cleaning</h3>
+<ul class="details-list">
+<li>Selective solenoid valve activation</li>
+<li>Focused cleaning on specific section</li>
+<li>Post-clean verification of restoration</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="source-tag">
+<p>Source: HelioMetrics Research Paper, Section IV-C (p.3)</p>
+</div>
+</div>
+</body>
+</html>

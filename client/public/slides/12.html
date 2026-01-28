@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Conclusion Summary</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 1280px;
+            height: 720px;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            background-color: #0F172A;
+            color: #F8FAFC;
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #1e293b;
+        }
+
+        /* SVG Background */
+        .bg-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        /* Main Content Wrapper */
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+            flex: 1;
+            padding: 40px 60px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            margin-bottom: 25px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .main-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0;
+        }
+
+        .sub-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            color: #94A3B8;
+            margin: 0;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Layout Grid */
+        .conclusion-grid {
+            display: grid;
+            grid-template-columns: 2fr 1.2fr;
+            grid-template-rows: auto 1fr;
+            gap: 25px;
+            flex: 1;
+        }
+
+        /* Achievement Cards Container (Left Top) */
+        .achievements-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        /* Achievement Card */
+        .achievement-card {
+            background-color: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        
+        .achievement-card:hover {
+            transform: translateY(-2px);
+            background-color: rgba(30, 41, 59, 0.8);
+        }
+
+        .card-accent-bar {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+        }
+
+        .acc-efficiency { background-color: #F59E0B; }
+        .acc-water { background-color: #06B6D4; }
+        .acc-finance { background-color: #10B981; }
+        .acc-environment { background-color: #3B82F6; }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            color: #94A3B8;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #fff;
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+
+        .stat-subtext {
+            font-size: 0.9rem;
+            color: #CBD5E1;
+            line-height: 1.4;
+        }
+
+        .highlight-green { color: #10B981; font-weight: 600; }
+        .highlight-amber { color: #F59E0B; font-weight: 600; }
+        .highlight-cyan { color: #06B6D4; font-weight: 600; }
+
+        /* Paradigm Shift Section (Right Column - Full Height) */
+        .paradigm-shift-card {
+            grid-column: 2;
+            grid-row: 1 / span 2;
+            background-color: rgba(15, 23, 42, 0.5);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #60A5FA;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .shift-item {
+            margin-bottom: 25px;
+            position: relative;
+            padding-left: 20px;
+            border-left: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .shift-label {
+            font-size: 0.8rem;
+            color: #94A3B8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .shift-content {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #E2E8F0;
+            line-height: 1.4;
+        }
+        
+        .arrow-down {
+            color: #60A5FA;
+            margin: 10px 0;
+            padding-left: 15px;
+        }
+
+        .shift-highlight {
+            background-color: rgba(59, 130, 246, 0.15);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #3B82F6;
+            margin-top: 10px;
+        }
+
+        .loss-reduction {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 5px;
+        }
+
+        /* Impact Section (Bottom Left) */
+        .impact-section {
+            background-color: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 20px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px dashed rgba(255, 255, 255, 0.15);
+        }
+
+        .impact-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+        }
+
+        .impact-icon-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: rgba(16, 185, 129, 0.15);
+            color: #10B981;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .impact-text h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            color: #fff;
+            margin: 0 0 5px 0;
+        }
+
+        .impact-text p {
+            font-size: 0.85rem;
+            color: #94A3B8;
+            margin: 0;
+        }
+
+        /* Source Tag */
+        .source-tag {
+            position: absolute;
+            bottom: 25px;
+            right: 60px;
+            font-size: 0.75rem;
+            color: #64748B;
+        }
+
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background -->
+<svg class="bg-svg" preserveaspectratio="none" viewbox="0 0 1280 720">
+<defs>
+<lineargradient id="bgGrad" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#1e293b;stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:#0f172a;stop-opacity:1"></stop>
+</lineargradient>
+<pattern height="20" id="dotPattern" patternunits="userSpaceOnUse" width="20" x="0" y="0">
+<circle cx="2" cy="2" fill="rgba(255,255,255,0.03)" r="1"></circle>
+</pattern>
+</defs>
+<rect fill="url(#bgGrad)" height="100%" width="100%"></rect>
+<rect fill="url(#dotPattern)" height="100%" width="100%"></rect>
+<!-- Decorative Glows -->
+<circle cx="1000" cy="600" fill="#3B82F6" fill-opacity="0.05" filter="blur(80px)" r="300"></circle>
+<circle cx="200" cy="100" fill="#F59E0B" fill-opacity="0.05" filter="blur(80px)" r="200"></circle>
+</svg>
+<div class="content-wrapper">
+<div class="header">
+<div>
+<h1 class="main-title">Conclusion</h1>
+<p class="sub-title">Summary of Impact &amp; Benefits</p>
+</div>
+<div style="display: flex; align-items: center; gap: 10px;">
+<span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.2rem; color: #fff;">HelioMetrics</span>
+<i class="fas fa-sun text-yellow-500"></i>
+</div>
+</div>
+<div class="conclusion-grid">
+<!-- Left Column: Key Achievements Grid -->
+<div class="achievements-container">
+<!-- Card 1: Efficiency -->
+<div class="achievement-card">
+<div class="card-accent-bar acc-efficiency"></div>
+<div class="stat-header">
+<i class="fas fa-chart-line text-yellow-500"></i> Efficiency Gain
+                    </div>
+<div class="stat-value">5% <span style="font-size: 1rem; font-weight: 500; color: #94A3B8;">Absolute</span></div>
+<p class="stat-subtext">
+                        Empirical capture improved from <span class="highlight-amber">67% to 72%</span>.
+                    </p>
+</div>
+<!-- Card 2: Water Savings -->
+<div class="achievement-card">
+<div class="card-accent-bar acc-water"></div>
+<div class="stat-header">
+<i class="fas fa-tint text-cyan-500"></i> Water Reduction
+                    </div>
+<div class="stat-value">40%</div>
+<p class="stat-subtext">
+                        Reduced annual consumption from 720 to <span class="highlight-cyan">432 tons</span>.
+                    </p>
+</div>
+<!-- Card 3: Financial ROI -->
+<div class="achievement-card">
+<div class="card-accent-bar acc-finance"></div>
+<div class="stat-header">
+<i class="fas fa-coins text-green-500"></i> Economic ROI
+                    </div>
+<div class="stat-value">3.35 <span style="font-size: 1rem; font-weight: 500; color: #94A3B8;">Years</span></div>
+<p class="stat-subtext">
+                        Break-even period with <span class="highlight-green">4.29M AED</span> savings over 5 years.
+                    </p>
+</div>
+<!-- Card 4: Environmental -->
+<div class="achievement-card">
+<div class="card-accent-bar acc-environment"></div>
+<div class="stat-header">
+<i class="fas fa-globe-americas text-blue-500"></i> CO₂ Avoided
+                    </div>
+<div class="stat-value">3,617 <span style="font-size: 1rem; font-weight: 500; color: #94A3B8;">Tons</span></div>
+<p class="stat-subtext">
+                        Annual emissions displacement per 2MW installation.
+                    </p>
+</div>
+</div>
+<!-- Right Column: Paradigm Shift -->
+<div class="paradigm-shift-card">
+<div>
+<div class="section-title">
+<i class="fas fa-sync-alt"></i> The Paradigm Shift
+                    </div>
+<div class="shift-item" style="border-left-color: #64748B; opacity: 0.7;">
+<span class="shift-label">Traditional Approach</span>
+<div class="shift-content">Reactive Scheduled Maintenance</div>
+</div>
+<div class="arrow-down">
+<i class="fas fa-arrow-down"></i>
+</div>
+<div class="shift-item" style="border-left-color: #3B82F6;">
+<span class="shift-label" style="color: #60A5FA;">HelioMetrics Approach</span>
+<div class="shift-content">Proactive Performance Optimization</div>
+</div>
+<div class="shift-highlight">
+<span class="shift-label" style="margin-bottom: 8px;">Operational Loss Conversion</span>
+<div class="loss-reduction">
+<span style="color: #EF4444; text-decoration: line-through;">35.9%</span>
+<i class="fas fa-long-arrow-alt-right text-gray-400"></i>
+<span style="color: #10B981; font-size: 1.4rem; font-weight: 700;">13.46%</span>
+</div>
+<p style="font-size: 0.75rem; margin-top: 8px; color: #94A3B8;">Through intelligent automation</p>
+</div>
+</div>
+<div style="text-align: center; margin-top: 20px;">
+<div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; display: inline-block;">
+<p style="margin: 0; font-size: 0.85rem; color: #E2E8F0;">
+<i class="fas fa-globe text-blue-400 mr-2"></i>Global Market: 200+ GW
+                        </p>
+</div>
+</div>
+</div>
+<!-- Bottom Left: Strategic Impact -->
+<div class="impact-section" style="grid-column: 1;">
+<div class="impact-group">
+<div class="impact-icon-circle">
+<i class="fas fa-flag"></i>
+</div>
+<div class="impact-text">
+<h4>Strategic Alignment</h4>
+<p>Supports UAE Clean Energy Strategy 2050 targets.</p>
+</div>
+</div>
+<div style="height: 40px; width: 1px; background: rgba(255,255,255,0.1); margin: 0 20px;"></div>
+<div class="impact-group">
+<div class="impact-icon-circle" style="background-color: rgba(59, 130, 246, 0.15); color: #3B82F6; border-color: rgba(59, 130, 246, 0.3);">
+<i class="fas fa-layer-group"></i>
+</div>
+<div class="impact-text">
+<h4>Scalable Solution</h4>
+<p>Addresses dust-intensive regions globally.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="source-tag">Source: HelioMetrics Research Paper, Section XIX (p.10-11)</div>
+</div>
+</div>
+</body>
+</html>

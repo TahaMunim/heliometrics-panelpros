@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ROI &amp; Economic Analysis</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;family=Roboto+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 1280px;
+            height: 720px;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            background-color: #0F172A;
+            color: #F8FAFC;
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #1e293b;
+        }
+
+        /* Background SVG */
+        .bg-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        /* Header */
+        .header {
+            padding: 40px 60px 20px 60px;
+            z-index: 10;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .main-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .sub-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            color: #94A3B8;
+            margin: 0;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Content Layout */
+        .content-area {
+            flex: 1;
+            padding: 30px 60px;
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 30px;
+            z-index: 10;
+        }
+
+        /* Left Column: Stats Cards */
+        .stats-col {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .stat-card {
+            background-color: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+            backdrop-filter: blur(5px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-accent-bar {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+        }
+
+        .accent-green { background-color: #10B981; }
+        .accent-amber { background-color: #F59E0B; }
+        .accent-blue { background-color: #3B82F6; }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: #94A3B8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #F8FAFC;
+        }
+        
+        .stat-subtext {
+            font-size: 0.8rem;
+            color: #CBD5E1;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .comparison-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed rgba(255,255,255,0.1);
+        }
+
+        .comp-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .comp-lbl { font-size: 0.7rem; color: #64748B; }
+        .comp-val { font-size: 0.9rem; font-weight: 600; color: #E2E8F0; }
+
+        /* Right Column: Main Chart & Investment */
+        .chart-col {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .chart-container {
+            flex: 1;
+            background-color: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 20px;
+            position: relative;
+            min-height: 280px;
+        }
+
+        .investment-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .inv-box {
+            background-color: rgba(30, 41, 59, 0.4);
+            border-radius: 12px;
+            padding: 15px 20px;
+            border-left: 4px solid;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .inv-hm { border-color: #F59E0B; }
+        .inv-conv { border-color: #64748B; }
+
+        .inv-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #E2E8F0;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .inv-cost {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .inv-detail {
+            font-size: 0.75rem;
+            color: #94A3B8;
+            margin-top: 5px;
+        }
+
+        /* Source Tag */
+        .source-tag {
+            position: absolute;
+            bottom: 30px;
+            right: 60px;
+            font-size: 0.75rem;
+            color: #64748B;
+        }
+
+        /* Custom badge styles */
+        .badge-positive {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10B981;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .badge-negative {
+            background: rgba(239, 68, 68, 0.15);
+            color: #EF4444;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .chart-title {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #E2E8F0;
+        }
+
+        .chart-legend {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 15px;
+            font-size: 0.8rem;
+        }
+        
+        .legend-item { display: flex; align-items: center; gap: 6px; color: #CBD5E1; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; }
+        .dot-hm { background-color: #F59E0B; }
+        .dot-conv { background-color: #64748B; }
+        .dot-grid { background-color: #EF4444; }
+
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background -->
+<svg class="bg-layer" preserveaspectratio="none" viewbox="0 0 1280 720">
+<defs>
+<lineargradient id="bgGrad" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#1e293b;stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:#0f172a;stop-opacity:1"></stop>
+</lineargradient>
+<pattern height="20" id="tinyGrid" patternunits="userSpaceOnUse" width="20">
+<path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="0.5"></path>
+</pattern>
+</defs>
+<rect fill="url(#bgGrad)" height="100%" width="100%"></rect>
+<rect fill="url(#tinyGrid)" height="100%" width="100%"></rect>
+<!-- Glows -->
+<circle cx="200" cy="600" fill="#10B981" filter="blur(100px)" opacity="0.1" r="200"></circle>
+<circle cx="1000" cy="100" fill="#F59E0B" filter="blur(80px)" opacity="0.1" r="150"></circle>
+</svg>
+<div class="header">
+<div>
+<h1 class="main-title">Economic Analysis &amp; ROI</h1>
+<p class="sub-title">Financial Viability &amp; Long-Term Value</p>
+</div>
+<div class="text-right">
+<div class="text-sm text-gray-400 mb-1">PROJECT LIFESPAN</div>
+<div class="text-xl font-bold text-white">25 Years</div>
+</div>
+</div>
+<div class="content-area">
+<!-- Left Column -->
+<div class="stats-col">
+<!-- Stat 1: Break Even -->
+<div class="stat-card">
+<div class="card-accent-bar accent-green"></div>
+<p class="stat-label">Break-Even Point</p>
+<p class="stat-value">3.35 Years</p>
+<div class="stat-subtext">
+<i class="fas fa-check-circle text-green-400 mr-2"></i>
+<span>Surpasses conventional PV speed</span>
+</div>
+</div>
+<!-- Stat 2: 5-Year Savings -->
+<div class="stat-card">
+<div class="card-accent-bar accent-amber"></div>
+<p class="stat-label">5-Year Cumulative Savings</p>
+<p class="stat-value">4.29M <span class="text-lg text-gray-400">AED</span></p>
+<div class="stat-subtext">
+<span>vs. Conventional PV Systems</span>
+</div>
+<div class="comparison-row">
+<div class="comp-item">
+<span class="comp-lbl">vs Grid Power</span>
+<span class="comp-val text-green-400">12.38M AED</span>
+</div>
+<div class="comp-item">
+<span class="comp-lbl">ROI Factor</span>
+<span class="comp-val text-amber-400">High Growth</span>
+</div>
+</div>
+</div>
+<!-- Stat 3: Loss Rates -->
+<div class="stat-card">
+<div class="card-accent-bar accent-blue"></div>
+<p class="stat-label">Cumulative Loss Rate</p>
+<div class="flex items-end gap-3">
+<p class="stat-value text-blue-400">13.5%</p>
+<span class="text-sm text-gray-400 mb-2">HelioMetrics</span>
+</div>
+<div class="comparison-row" style="margin-top: 10px; padding-top: 10px;">
+<div class="comp-item w-full">
+<div class="flex justify-between items-center mb-1">
+<span class="comp-lbl">Conventional Loss</span>
+<span class="comp-val text-red-400">35.9%</span>
+</div>
+<div class="w-full bg-gray-700 h-1.5 rounded-full overflow-hidden">
+<div class="bg-red-500 h-full" style="width: 100%"></div>
+</div>
+<div class="w-full bg-gray-700 h-1.5 rounded-full overflow-hidden mt-1">
+<div class="bg-blue-500 h-full" style="width: 37%"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column -->
+<div class="chart-col">
+<!-- Investment Comparison -->
+<div class="investment-comparison">
+<div class="inv-box inv-hm">
+<div class="inv-title">
+<i class="fas fa-layer-group text-amber-500"></i> HelioMetrics Investment
+                    </div>
+<div class="inv-cost">6.56M <span class="text-sm text-gray-400 font-normal">AED</span></div>
+<div class="inv-detail">
+                        295 AED per panel (incl. IoT hardware)
+                    </div>
+</div>
+<div class="inv-box inv-conv">
+<div class="inv-title">
+<i class="fas fa-solar-panel text-gray-400"></i> Conventional PV
+                    </div>
+<div class="inv-cost">3.59M <span class="text-sm text-gray-400 font-normal">AED</span></div>
+<div class="inv-detail">
+                        150 AED per panel (standard)
+                    </div>
+</div>
+</div>
+<!-- Timeline Chart Container -->
+<div class="chart-container">
+<div class="chart-title">ROI &amp; Cumulative Cost Projection (Million AED)</div>
+<div class="chart-legend">
+<div class="legend-item"><div class="dot dot-grid"></div>Grid Power</div>
+<div class="legend-item"><div class="dot dot-conv"></div>Conventional PV</div>
+<div class="legend-item"><div class="dot dot-hm"></div>HelioMetrics</div>
+</div>
+<div style="width: 100%; height: 100%; padding-top: 30px;">
+<canvas id="roiChart"></canvas>
+</div>
+</div>
+</div>
+</div>
+<div class="source-tag">Source: HelioMetrics Research Paper, Section VIII. Economic Analysis (p.5-6)</div>
+</div>
+<script>
+        // Chart configuration
+        const ctx = document.getElementById('roiChart').getContext('2d');
+        
+        // Data approximation based on paper formulas
+        // Year 0 to 5
+        const labels = ['Year 0', 'Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'];
+        
+        // Grid Cost (Status Quo) - accumulating cost
+        const dataGrid = [0, -6.6, -15.2, -26.4, -40.0, -55.8]; 
+        
+        // Conventional PV - Initial 3.59M + compounding losses
+        const dataConv = [-3.59, -8.4, -14.9, -23.8, -35.9, -47.7];
+        
+        // HelioMetrics - Initial 6.56M + lower compounding losses
+        const dataHM = [-6.56, -9.8, -14.5, -21.2, -30.8, -43.4];
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'HelioMetrics',
+                        data: dataHM,
+                        borderColor: '#F59E0B',
+                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#F59E0B',
+                        pointRadius: 4,
+                        tension: 0.3
+                    },
+                    {
+                        label: 'Conventional PV',
+                        data: dataConv,
+                        borderColor: '#94A3B8', // Slate 400
+                        backgroundColor: 'rgba(148, 163, 184, 0.05)',
+                        borderWidth: 2,
+                        borderDash: [5, 5],
+                        pointBackgroundColor: '#94A3B8',
+                        pointRadius: 3,
+                        tension: 0.3
+                    },
+                    {
+                        label: 'Grid Power (Status Quo)',
+                        data: dataGrid,
+                        borderColor: '#EF4444', // Red 500
+                        borderWidth: 2,
+                        pointBackgroundColor: '#EF4444',
+                        pointRadius: 3,
+                        tension: 0.3,
+                        hidden: false
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.05)'
+                        },
+                        ticks: {
+                            color: '#94A3B8',
+                            callback: function(value) {
+                                return value + 'M';
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Cumulative Cost (AED)',
+                            color: '#64748B'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.05)'
+                        },
+                        ticks: {
+                            color: '#94A3B8'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false // Using custom legend
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                        titleColor: '#F8FAFC',
+                        bodyColor: '#CBD5E1',
+                        borderColor: 'rgba(255,255,255,0.1)',
+                        borderWidth: 1
+                    },
+                    annotation: {
+                        annotations: {
+                            line1: {
+                                type: 'line',
+                                xMin: 3.35,
+                                xMax: 3.35,
+                                borderColor: '#10B981',
+                                borderWidth: 1,
+                                borderDash: [2, 2],
+                                label: {
+                                    content: 'Break-Even',
+                                    enabled: true,
+                                    position: 'top',
+                                    backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                                    color: 'white'
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
