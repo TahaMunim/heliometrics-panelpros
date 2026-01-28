@@ -1,248 +1,215 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Limitations &amp; Future Work</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Limitations & Future Work</title>
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;family=Roboto+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
 <style>
-        body {
-            margin: 0;
-            padding: 0;
-            width: 1280px;
-            height: 720px;
-            overflow: hidden;
-            font-family: 'Inter', sans-serif;
-            background-color: #0F172A;
-            color: #F8FAFC;
-        }
-
-        .slide-container {
-            width: 1280px;
-            height: 720px;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            background-color: #1e293b;
-        }
-
-        /* SVG Background */
-        .bg-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-        }
-
-        /* Header */
-        .header-section {
-            padding: 40px 60px 20px 60px;
-            z-index: 10;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-        }
-
-        .main-title {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #ffffff;
-            margin: 0;
-        }
-
-        .sub-title {
-            font-family: 'Inter', sans-serif;
-            font-size: 1.1rem;
-            color: #94A3B8;
-            margin: 0;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        /* Content Area */
-        .content-area {
-            flex: 1;
-            display: flex;
-            padding: 40px 60px;
-            gap: 40px;
-            z-index: 10;
-        }
-
-        /* Columns */
-        .column {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .column-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid;
-        }
-
-        .left-col .column-header { border-bottom-color: #EF4444; }
-        .right-col .column-header { border-bottom-color: #3B82F6; }
-
-        .col-icon-box {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            margin-right: 15px;
-        }
-
-        .left-col .col-icon-box { 
-            background-color: rgba(239, 68, 68, 0.15); 
-            color: #EF4444; 
-            border: 1px solid rgba(239, 68, 68, 0.3);
-        }
-
-        .right-col .col-icon-box { 
-            background-color: rgba(59, 130, 246, 0.15); 
-            color: #3B82F6; 
-            border: 1px solid rgba(59, 130, 246, 0.3);
-        }
-
-        .column-title {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #fff;
-        }
-
-        /* List Items */
-        .item-list {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .list-item {
-            background-color: rgba(30, 41, 59, 0.5);
-            border-radius: 10px;
-            padding: 16px;
-            display: flex;
-            align-items: flex-start;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: transform 0.2s, background-color 0.2s;
-        }
-
-        .list-item:hover {
-            transform: translateX(5px);
-            background-color: rgba(30, 41, 59, 0.8);
-        }
-
-        .item-icon {
-            min-width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            font-size: 0.9rem;
-            margin-top: 2px;
-        }
-
-        .left-col .item-icon { background-color: rgba(239, 68, 68, 0.1); color: #FCA5A5; }
-        .right-col .item-icon { background-color: rgba(59, 130, 246, 0.1); color: #93C5FD; }
-
-        .item-content {
-            flex: 1;
-        }
-
-        .item-title {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 1rem;
-            font-weight: 600;
-            color: #E2E8F0;
-            margin-bottom: 4px;
-        }
-
-        .item-desc {
-            font-size: 0.85rem;
-            color: #94A3B8;
-            line-height: 1.4;
-        }
-
-        .highlight-badge {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-top: 5px;
-            font-family: 'Roboto Mono', monospace;
-        }
-
-        .left-col .highlight-badge { background-color: rgba(239, 68, 68, 0.2); color: #FCA5A5; }
-        .right-col .highlight-badge { background-color: rgba(59, 130, 246, 0.2); color: #93C5FD; }
-
-        /* Timeline Connector for Right Col */
-        .timeline-connector {
-            position: absolute;
-            left: 23px;
-            top: 40px;
-            bottom: -20px;
-            width: 2px;
-            background-color: rgba(59, 130, 246, 0.2);
-            z-index: 0;
-        }
-
-        .timeline-wrapper {
-            position: relative;
-        }
-        
-        /* Decorative Elements */
-        .source-tag {
-            position: absolute;
-            bottom: 30px;
-            right: 60px;
-            font-size: 0.75rem;
-            color: #64748B;
-            z-index: 20;
-        }
-
-        .glow-bg {
-            position: absolute;
-            width: 400px;
-            height: 400px;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.08;
-            z-index: 0;
-        }
-
-    </style>
+body {
+    margin: 0;
+    padding: 0;
+    width: 1280px;
+    height: 720px;
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+    background-color: #0F172A;
+    color: #F8FAFC;
+}
+.slide-container {
+    width: 1280px;
+    height: 720px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background-color: #1e293b;
+}
+/* SVG Background */
+.bg-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+/* Header */
+.header-section {
+    padding: 40px 60px 20px 60px;
+    z-index: 10;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+.main-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+}
+.sub-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.1rem;
+    color: #94A3B8;
+    margin: 0;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+/* Content Area */
+.content-area {
+    flex: 1;
+    display: flex;
+    padding: 40px 60px;
+    gap: 40px;
+    z-index: 10;
+}
+/* Columns */
+.column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.column-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid;
+}
+.left-col .column-header { border-bottom-color: #EF4444; }
+.right-col .column-header { border-bottom-color: #3B82F6; }
+.col-icon-box {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-right: 15px;
+}
+.left-col .col-icon-box { 
+    background-color: rgba(239, 68, 68, 0.15); 
+    color: #EF4444; 
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+.right-col .col-icon-box { 
+    background-color: rgba(59, 130, 246, 0.15); 
+    color: #3B82F6; 
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+.column-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+}
+/* List Items */
+.item-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.list-item {
+    background-color: rgba(30, 41, 59, 0.5);
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    align-items: flex-start;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: transform 0.2s, background-color 0.2s;
+}
+.list-item:hover {
+    transform: translateX(5px);
+    background-color: rgba(30, 41, 59, 0.8);
+}
+.item-icon {
+    min-width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    font-size: 0.9rem;
+    margin-top: 2px;
+}
+.left-col .item-icon { background-color: rgba(239, 68, 68, 0.1); color: #FCA5A5; }
+.right-col .item-icon { background-color: rgba(59, 130, 246, 0.1); color: #93C5FD; }
+.item-content { flex: 1; }
+.item-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #E2E8F0;
+    margin-bottom: 4px;
+}
+.item-desc {
+    font-size: 0.85rem;
+    color: #94A3B8;
+    line-height: 1.4;
+}
+.highlight-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-top: 5px;
+    font-family: 'Roboto Mono', monospace;
+}
+.left-col .highlight-badge { background-color: rgba(239, 68, 68, 0.2); color: #FCA5A5; }
+.right-col .highlight-badge { background-color: rgba(59, 130, 246, 0.2); color: #93C5FD; }
+/* Timeline Connector for Right Col */
+.timeline-connector {
+    position: absolute;
+    left: 23px;
+    top: 40px;
+    bottom: -20px;
+    width: 2px;
+    background-color: rgba(59, 130, 246, 0.2);
+    z-index: 0;
+}
+.timeline-wrapper { position: relative; }
+/* Decorative Elements */
+.source-tag {
+    position: absolute;
+    bottom: 30px;
+    right: 60px;
+    font-size: 0.75rem;
+    color: #64748B;
+    z-index: 20;
+}
+.glow-bg {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.08;
+    z-index: 0;
+}
+</style>
 </head>
 <body>
 <div class="slide-container">
 <!-- Background -->
-<svg class="bg-layer" preserveaspectratio="none" viewbox="0 0 1280 720">
+<svg class="bg-layer" preserveAspectRatio="none" viewBox="0 0 1280 720">
 <defs>
-<lineargradient id="bgGrad" x1="0%" x2="0%" y1="0%" y2="100%">
-<stop offset="0%" stop-color="#1e293b"></stop>
-<stop offset="100%" stop-color="#0f172a"></stop>
-</lineargradient>
-<pattern height="20" id="dots" patternunits="userSpaceOnUse" width="20">
-<circle cx="2" cy="2" fill="rgba(255,255,255,0.03)" r="1"></circle>
+<linearGradient id="bgGrad" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#1e293b"/>
+<stop offset="100%" stop-color="#0f172a"/>
+</linearGradient>
+<pattern height="20" id="dots" patternUnits="userSpaceOnUse" width="20">
+<circle cx="2" cy="2" r="1" fill="rgba(255,255,255,0.03)"/>
 </pattern>
 </defs>
-<rect fill="url(#bgGrad)" height="100%" width="100%"></rect>
-<rect fill="url(#dots)" height="100%" width="100%"></rect>
+<rect fill="url(#bgGrad)" width="100%" height="100%"/>
+<rect fill="url(#dots)" width="100%" height="100%"/>
 </svg>
 <div class="glow-bg" style="top: -100px; left: -100px; background-color: #EF4444;"></div>
 <div class="glow-bg" style="bottom: -100px; right: -100px; background-color: #3B82F6;"></div>
@@ -258,13 +225,10 @@
 <!-- Left Column: Limitations -->
 <div class="column left-col">
 <div class="column-header">
-<div class="col-icon-box">
-<i class="fas fa-exclamation-triangle"></i>
-</div>
+<div class="col-icon-box"><i class="fas fa-exclamation-triangle"></i></div>
 <h2 class="column-title">Current Limitations</h2>
 </div>
 <div class="item-list">
-<!-- Item 1 -->
 <div class="list-item">
 <div class="item-icon"><i class="fas fa-microchip"></i></div>
 <div class="item-content">
@@ -272,7 +236,6 @@
 <p class="item-desc">Voltage/current sensors have ±2% variance which may cause marginal false triggers during rapid irradiance changes.</p>
 </div>
 </div>
-<!-- Item 2 -->
 <div class="list-item">
 <div class="item-icon"><i class="fas fa-tools"></i></div>
 <div class="item-content">
@@ -280,7 +243,6 @@
 <p class="item-desc">Solenoid valves and spray nozzles require annual inspection to prevent clogging and ensure durability.</p>
 </div>
 </div>
-<!-- Item 3 -->
 <div class="list-item">
 <div class="item-icon"><i class="fas fa-wifi"></i></div>
 <div class="item-content">
@@ -289,7 +251,6 @@
 <span class="highlight-badge">+75 AED/section</span>
 </div>
 </div>
-<!-- Item 4 -->
 <div class="list-item">
 <div class="item-icon"><i class="fas fa-layer-group"></i></div>
 <div class="item-content">
@@ -302,51 +263,35 @@
 <!-- Right Column: Future Work -->
 <div class="column right-col">
 <div class="column-header">
-<div class="col-icon-box">
-<i class="fas fa-rocket"></i>
-</div>
+<div class="col-icon-box"><i class="fas fa-rocket"></i></div>
 <h2 class="column-title">Future Developments</h2>
 </div>
 <div class="item-list timeline-wrapper">
 <div class="timeline-connector"></div>
-<!-- Item 1 -->
-<div class="list-item" style="z-index: 1;">
-<div class="item-icon"><i class="fas fa-brain"></i></div>
+<div class="list-item"><div class="item-icon"><i class="fas fa-brain"></i></div>
 <div class="item-content">
 <div class="item-title">Machine Learning Integration</div>
 <p class="item-desc">LSTM for dust prediction &amp; DQN-based cleaning optimization to balance energy vs. water usage.</p>
 <span class="highlight-badge">34.9% Addt'l Savings</span>
-</div>
-</div>
-<!-- Item 2 -->
-<div class="list-item" style="z-index: 1;">
-<div class="item-icon"><i class="fas fa-wind"></i></div>
+</div></div>
+<div class="list-item"><div class="item-icon"><i class="fas fa-wind"></i></div>
 <div class="item-content">
 <div class="item-title">Waterless Alternatives</div>
 <p class="item-desc">Integration of compressed air and electrostatic cleaning modules for water-scarce regions.</p>
-</div>
-</div>
-<!-- Item 3 -->
-<div class="list-item" style="z-index: 1;">
-<div class="item-icon"><i class="fas fa-network-wired"></i></div>
+</div></div>
+<div class="list-item"><div class="item-icon"><i class="fas fa-network-wired"></i></div>
 <div class="item-content">
 <div class="item-title">Smart Grid Integration</div>
 <p class="item-desc">Bidirectional communication with utility grids for demand response and optimized storage.</p>
-</div>
-</div>
-<!-- Item 4 -->
-<div class="list-item" style="z-index: 1;">
-<div class="item-icon"><i class="fas fa-globe-americas"></i></div>
+</div></div>
+<div class="list-item"><div class="item-icon"><i class="fas fa-globe-americas"></i></div>
 <div class="item-content">
 <div class="item-title">Global Expansion</div>
 <p class="item-desc">Commercial production scaling to 100k units/year targeting MENA, India, Australia, and US markets.</p>
+</div></div>
 </div>
 </div>
 </div>
-</div>
-</div>
-<div class="source-tag">Source: HelioMetrics Research Paper, XVI &amp; XVII (p.8-9)</div>
 </div>
 </body>
 </html>
-

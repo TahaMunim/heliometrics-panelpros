@@ -11,64 +11,60 @@ export default function Presentation() {
   const [activeIndex, setActiveIndex] = useState(0);
   const isScrolling = useRef(false);
 
-  // Handle scroll events to update active index
+  // ------------------------
+  // Scroll handler for live counter
+  // ------------------------
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
     const handleScroll = () => {
-      if (isScrolling.current) return;
-      
+      if (isScrolling.current) return; // skip programmatic scrolls
       const height = container.clientHeight;
-      const scrollPosition = container.scrollTop;
-      const index = Math.round(scrollPosition / height);
-      
-      if (index !== activeIndex) {
-        setActiveIndex(index);
-      }
+      const scrollTop = container.scrollTop;
+      const index = Math.round(scrollTop / height);
+      if (index !== activeIndex) setActiveIndex(index);
     };
 
-    // Debounce scroll handler slightly for performance
-    let timeoutId: number;
-    const debouncedScroll = () => {
-      clearTimeout(timeoutId);
-      timeoutId = window.setTimeout(handleScroll, 50);
-    };
-
-    container.addEventListener("scroll", debouncedScroll);
-    return () => {
-      container.removeEventListener("scroll", debouncedScroll);
-      clearTimeout(timeoutId);
-    };
+    container.addEventListener("scroll", handleScroll);
+    return () => container.removeEventListener("scroll", handleScroll);
   }, [activeIndex]);
 
+  // ------------------------
+  // Scroll to a specific slide (with smooth animation)
+  // ------------------------
   const scrollToSlide = (index: number) => {
     if (!containerRef.current || !slides) return;
-    
-    // Clamp index
+
     const targetIndex = Math.max(0, Math.min(index, slides.length - 1));
-    
-    isScrolling.current = true;
     setActiveIndex(targetIndex);
-    
+    isScrolling.current = true;
+
     containerRef.current.scrollTo({
       top: targetIndex * containerRef.current.clientHeight,
       behavior: "smooth",
     });
 
-    // Reset scrolling flag after animation finishes (approximate)
+    // reset scrolling flag after animation
     setTimeout(() => {
       isScrolling.current = false;
-    }, 800);
+    }, 600);
   };
 
   const handleNext = () => scrollToSlide(activeIndex + 1);
   const handlePrev = () => scrollToSlide(activeIndex - 1);
 
+  // ------------------------
   // Keyboard navigation
+  // ------------------------
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "ArrowDown" || e.key === "ArrowRight" || e.key === "PageDown" || e.key === " ") {
+      if (
+        e.key === "ArrowDown" ||
+        e.key === "ArrowRight" ||
+        e.key === "PageDown" ||
+        e.key === " "
+      ) {
         e.preventDefault();
         handleNext();
       } else if (e.key === "ArrowUp" || e.key === "ArrowLeft" || e.key === "PageUp") {
@@ -76,11 +72,13 @@ export default function Presentation() {
         handlePrev();
       }
     };
-
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [activeIndex, slides]);
 
+  // ------------------------
+  // Loading state
+  // ------------------------
   if (isLoading) {
     return (
       <div className="h-screen w-full flex flex-col items-center justify-center bg-background text-foreground">
@@ -99,6 +97,9 @@ export default function Presentation() {
     );
   }
 
+  // ------------------------
+  // Error state
+  // ------------------------
   if (error || !slides) {
     return (
       <div className="h-screen w-full flex flex-col items-center justify-center bg-background text-foreground p-4">
@@ -127,24 +128,31 @@ export default function Presentation() {
     );
   }
 
+  // ------------------------
+  // Main presentation view
+  // ------------------------
   return (
     <div className="relative h-screen w-full overflow-hidden bg-black">
-      {/* Main Scroll Container */}
+      {/* Scrollable slide container */}
       <div 
         ref={containerRef}
         className="h-full w-full overflow-y-auto overflow-x-hidden snap-y-mandatory scrollbar-hide"
         style={{ scrollBehavior: 'smooth' }}
       >
         {slides.map((slide, index) => (
-          <SlideViewer 
-            key={slide.id} 
-            slide={slide} 
-            isActive={activeIndex === index}
-          />
+          <motion.div
+            key={slide.id}
+            initial={{ opacity: 0.5, y: 50 }}
+            animate={{ opacity: activeIndex === index ? 1 : 0.5, y: activeIndex === index ? 0 : 50 }}
+            transition={{ duration: 0.4 }}
+            className="h-screen w-full flex-shrink-0"
+          >
+            <SlideViewer slide={slide} isActive={activeIndex === index} />
+          </motion.div>
         ))}
       </div>
 
-      {/* Overlay Navigation */}
+      {/* Navigation Controls */}
       <NavigationControls
         currentSlideIndex={activeIndex}
         totalSlides={slides.length}
@@ -152,9 +160,9 @@ export default function Presentation() {
         onNext={handleNext}
         onGoTo={scrollToSlide}
       />
-      
-      {/* Slide Counter Overlay */}
-      <div className="fixed top-6 left-8 z-50 pointer-events-none mix-blend-difference text-white">
+
+      {/* Slide Counter */}
+      <div className="fixed top-6 right-20 z-50 pointer-events-none mix-blend-difference text-white">
         <span className="font-mono text-sm tracking-wider opacity-60">SLIDE</span>
         <div className="text-3xl font-display font-bold">
           {String(activeIndex + 1).padStart(2, '0')}
